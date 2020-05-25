@@ -1,0 +1,48 @@
+{
+  "name": "revit-netlify-fauna",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "-": "0.0.1",
+    "@analytics/google-analytics": "^0.3.1",
+    "@ckeditor/ckeditor5-build-classic": "^19.0.0",
+    "@ckeditor/ckeditor5-react": "^2.1.0",
+    "ag-grid-community": "^23.0.2",
+    "ag-grid-react": "^23.0.3",
+    "analytics": "^0.3.5",
+    "bootstrap": "^4.4.1",
+    "classnames": "^2.2.6",
+    "faunadb": "^2.13.1",
+    "markdown-magic": "^1.0.0",
+    "moment": "^2.24.0",
+    "netlify-identity-widget": "^1.4.2",
+    "node-sass": "^4.14.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-file-base64": "^1.0.3",
+    "react-image-crop": "^8.6.2",
+    "react-moment": "^0.9.7",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.1",
+    "react-toasts": "^3.0.6",
+    "reactstrap": "^8.4.1",
+    "sass-loader": "^8.0.2",
+    "save": "^2.4.0"
+  },
+  "scripts": {
+    "bootstrap": "netlify dev:exec node ./scripts/bootstrap-fauna-database.js",
+    "docs": "md-magic --path '**/*.md' --ignore 'node_modules'",
+    "start": "netlify dev",
+    "prebuild": "echo 'setup faunaDB' && npm run bootstrap",
+    "build": "react-scripts build"
+  },
+  "devDependencies": {
+    "netlify-cli": "^2.19.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
