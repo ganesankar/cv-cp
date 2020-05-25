@@ -23,7 +23,7 @@ const Header = (props) => {
     <div className=" bg-white border-bottom shadow-sm">
       <Navbar expand="md">
         <Container>
-          <NavbarBrand href="/">Revit</NavbarBrand>
+          <NavbarBrand href="/">Resume CP</NavbarBrand>
           <NavbarToggler onClick={toggle} className="mr-2">
             <i className="fa fa-bars" aria-hidden="true"></i>
           </NavbarToggler>
@@ -41,7 +41,7 @@ const Header = (props) => {
               <NavItem>
                 <NavLink
                   className="btn  btn btn-outline-primary"
-                  href="https://revit08.netlify.app"
+                  href="https://ganesankar.github.io/cv/"
                   target="_blank"
                 >
                   Frontend

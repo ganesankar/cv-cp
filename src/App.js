@@ -9,7 +9,6 @@ import Header from "./components/Header/Header";
 import Home from "./views/Home";
 import PagesList from "./views/PagesList";
 
-import routes from "./routes.js";
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -59,19 +58,18 @@ export default class App extends Component {
 
               <Header
                 {...this.props}
-                user={this.state.user.user_metadata.full_name}
+                user={this.state.user}
                 logout={this.logout}
-                routes={routes}
               />
               <div className="main-content">
                 <Switch>
                   <Route
                     exact
-                    path="/"
+                    path="/pages-list"
                     component={Home}
-                    user={this.state.user.user_metadata.full_name}
+                    user={this.state.user}
                   />
-                  <Route exact path="/pages-list" component={PagesList} />
+                  <Route exact path="/" component={PagesList} />
                 </Switch>
               </div>
               <AdminFooter />
