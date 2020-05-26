@@ -18,7 +18,6 @@ const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { routes, user, logout } = props;
   const toggle = () => setIsOpen(!isOpen);
-
   return (
     <div className=" bg-white border-bottom shadow-sm">
       <Navbar expand="md">
@@ -52,9 +51,6 @@ const Header = (props) => {
                   {user}
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>
-                    <NavLink href="/profile">Your Profile</NavLink>
-                  </DropdownItem>
                   <DropdownItem>
                     <NavLink href="/app-setting"> Settings</NavLink>
                   </DropdownItem>

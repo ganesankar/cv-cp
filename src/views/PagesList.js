@@ -39,9 +39,29 @@ export default class PagesList extends Component {
       cardview: false,
       context: { componentParent: this },
       editItem: {},
+      editItemContent: {},
       itemModView: false,
+      itemContentModView: false,
       itemTab: 1,
       itemList: [],
+      textFields: [
+        "title",
+        "link",
+        "company",
+        "location",
+        "subtitle",
+        "percentage",
+        "location",
+        "icon",
+        "type",
+        "institute",
+        "client",
+        "size",
+      ],
+      dateFields: ["startdate", "enddate"],
+      RichEditorFields: ["desc"],
+      textAreaFields: ["content"],
+      cc: 0,
       newItem: {
         id: 1,
         tag: "",
@@ -83,6 +103,56 @@ export default class PagesList extends Component {
             content: [],
           },
         },
+        {
+          name: "education",
+          value: {
+            title: "",
+            startdate: "",
+            enddate: "",
+            link: "",
+            institute: "",
+            location: "",
+            desc: "",
+            content: [],
+          },
+        },
+        {
+          name: "projects",
+          value: {
+            title: "",
+            startdate: "",
+            enddate: "",
+            link: "",
+            client: "",
+            company: "",
+            desc: "",
+            size: "",
+            content: [],
+          },
+        },
+        {
+          name: "otherprojects",
+          value: {
+            title: "",
+            startdate: "",
+            enddate: "",
+            link: "",
+            client: "",
+            company: "",
+            desc: "",
+            size: "",
+          },
+        },
+        {
+          name: "awards",
+          value: {
+            title: "",
+            startdate: "",
+            enddate: "",
+            institute: "",
+            desc: "",
+          },
+        },
       ],
     };
 
@@ -119,7 +189,7 @@ export default class PagesList extends Component {
     if (editItem.id) {
       api
         .update(editItem.id, editItem)
-        .then(() => {
+        .then((x) => {
           ToastsStore.success(`Page Changes Updated!`);
         })
         .catch((e) => {
@@ -130,6 +200,7 @@ export default class PagesList extends Component {
       api
         .create(editItem)
         .then((response) => {
+          console.log(response);
           ToastsStore.success(`Page Created Succesfully!`);
         })
         .catch((e) => {
@@ -180,11 +251,22 @@ export default class PagesList extends Component {
   };
 
   openUserModal = (id) => {
-    const itemDoc = this.state.itemList[id];
-
     this.setState({
-      editItem: itemDoc,
+      editItem: this.state.itemList[id],
       itemModView: true,
+    });
+  };
+  openItemContentModal = (ci) => {
+    console.log(this.state.editItem.content[ci]);
+    this.setState({
+      cc: ci,
+      editItemContent: this.state.editItem.content[ci],
+      itemContentModView: true,
+    });
+  };
+  closeItemContentModal = () => {
+    this.setState({
+      itemContentModView: false,
     });
   };
 
@@ -251,10 +333,24 @@ export default class PagesList extends Component {
   };
 
   render() {
-    const { editItem, itemList, itemTab } = this.state;
-    console.log(editItem);
+    const {
+      editItem,
+      itemList,
+      itemTab,
+      newContent,
+      editItemContent,
+      textFields,
+      dateFields,
+      textAreaFields,
+      RichEditorFields,
+      cc,
+    } = this.state;
+    console.log(editItemContent);
     const DragHandle = sortableHandle(() => (
       <span className="col-md-1">::</span>
+    ));
+    let optionItems = newContent.map((item) => (
+      <option key={item.name}>{item.name}</option>
     ));
     const SortableItem = sortableElement(({ value }) => (
       <>
@@ -319,7 +415,7 @@ export default class PagesList extends Component {
                                 <th scope="row">
                                   <span
                                     onClick={() => this.openUserModal(i)}
-                                    className="btn btn-sm"
+                                    className="btn btn-primary btn-sm"
                                   >
                                     {i + 1} EDIT
                                   </span>
@@ -431,14 +527,24 @@ export default class PagesList extends Component {
                               <Col className="col-sm-12 col-md-6">
                                 <FormGroup>
                                   <label className="form-label">type</label>
-                                  <Input
-                                    type="text"
-                                    value={editItem.type}
-                                    name="type"
-                                    onChange={(e) =>
-                                      this.onInpCh("type", e.target.value)
-                                    }
-                                  />
+
+                                  {editItem.id ? (
+                                    <Input
+                                      type="text"
+                                      value={editItem.type}
+                                      name="type"
+                                      disabled={true}
+                                    />
+                                  ) : (
+                                    <select
+                                      onChange={(e) =>
+                                        this.onInpCh("type", e.target.value)
+                                      }
+                                      class="form-control"
+                                    >
+                                      {optionItems}
+                                    </select>
+                                  )}
                                 </FormGroup>
                               </Col>
                             </Row>{" "}
@@ -475,62 +581,86 @@ export default class PagesList extends Component {
                         <TabPane tabId={2}>
                           <Container fluid className="pt-3">
                             {" "}
-                            <Row>
-                              {!editItem.content ||
-                                (editItem.content.length === 0 && (
-                                  <span className="alert">
-                                    {" "}
-                                    No Content to show
-                                  </span>
-                                ))}
-                              <button
-                                className="btn btn-sm"
-                                type="button"
-                                onClick={(e) => this.addContent(1)}
-                              >
-                                Add
-                              </button>
-
-                              <SortableContainer
-                                onSortEndContent={this.onSortEndContent}
-                                useDragHandle
-                              ></SortableContainer>
-                              <Table>
-                                <thead>
-                                  <tr>
-                                    {editItem.content &&
-                                      editItem.content.length > 0 &&
-                                      Object.keys(
-                                        editItem.content[0]
-                                      ).map((key) => <th>{key}</th>)}
-                                  </tr>
-                                </thead>
-                                <tbody>
+                            <Row></Row>
+                            {!editItem.content ||
+                              (editItem.content.length === 0 && (
+                                <div
+                                  className="alert alert-danger"
+                                  role="alert"
+                                >
+                                  No Content to Show
+                                </div>
+                              ))}
+                            <button
+                              className="btn btn-primary btn-sm"
+                              type="button"
+                              onClick={(e) => this.addContent(1)}
+                            >
+                              Add
+                            </button>
+                            <SortableContainer
+                              onSortEndContent={this.onSortEndContent}
+                              useDragHandle
+                            ></SortableContainer>
+                            <Table>
+                              <thead>
+                                <tr className="text-uppercase">
                                   {editItem.content &&
-                                    editItem.content.map((value, index) => (
-                                      <tr>
-                                        {Object.keys(value).map((key) => (
-                                          <td>
-                                            <Input
-                                              type="text"
-                                              className="form-control-sm"
-                                              value={value[key]}
-                                              name="type"
-                                              onChange={(e) =>
-                                                this.onContentInpCh(
-                                                  index,
-                                                  key,
-                                                  e.target.value
-                                                )
-                                              }
-                                            />
-                                          </td>
-                                        ))}
-                                      </tr>
-                                    ))}{" "}
-                                </tbody>
-                              </Table>
-                            </Row>
+                                    editItem.content.length > 0 &&
+                                    editItem.content[0] &&
+                                    Object.keys(editItem.content[0]).length >
+                                      2 && <th> EDIT</th>}
+                                  {editItem.content &&
+                                    editItem.content.length > 0 &&
+                                    Object.keys(
+                                      editItem.content[0]
+                                    ).map((key, i) => (
+                                      <>{i < 2 && <th>{key}</th>}</>
+                                    ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {editItem.content &&
+                                  editItem.content.map((value, index) => (
+                                    <tr>
+                                      {value && Object.keys(value).length > 2 && (
+                                        <td>
+                                          <button
+                                            className="btn btn-primary btn-sm"
+                                            type="button"
+                                            onClick={(e) =>
+                                              this.openItemContentModal(index)
+                                            }
+                                          >
+                                            EDIT
+                                          </button>
+                                        </td>
+                                      )}
+                                      {Object.keys(value).map((key, i) => (
+                                        <>
+                                          {i < 2 && (
+                                            <td>
+                                              <Input
+                                                type="text"
+                                                className="form-control-sm"
+                                                value={value[key]}
+                                                name="type"
+                                                onChange={(e) =>
+                                                  this.onContentInpCh(
+                                                    index,
+                                                    key,
+                                                    e.target.value
+                                                  )
+                                                }
+                                              />
+                                            </td>
+                                          )}
+                                        </>
+                                      ))}
+                                    </tr>
+                                  ))}{" "}
+                              </tbody>
+                            </Table>
                           </Container>
                         </TabPane>
                       </TabContent>
@@ -543,6 +673,82 @@ export default class PagesList extends Component {
             </ModalBody>
           </Modal>
         </Container>
+        <Modal
+          isOpen={this.state.itemContentModView}
+          toggle={this.openItemContentModal}
+          className="modal-lg lg"
+        >
+          <ModalHeader toggle={this.closeItemContentModal} className="h2">
+            Edit Content
+          </ModalHeader>
+          <ModalBody>
+            <form
+              className="todo-create-wrapper"
+              onSubmit={(e) => {
+                e.preventDefault();
+                this.updateContentItem();
+              }}
+            >
+              <Container fluid>
+                {editItemContent &&
+                  Object.keys(editItemContent).length > 0 &&
+                  Object.keys(editItemContent).map((key, i) => (
+                    <Row className="pb-2">
+                      <Col className="col-sm-12 col-md-2">
+                        <label className="align-right text-uppercase">
+                          {key}
+                        </label>
+                      </Col>
+                      <Col className="col-sm-12 col-md-10">
+                        {textFields.includes(key) && (
+                          <Input
+                            type="text"
+                            value={editItemContent[key]}
+                            name={key}
+                            onChange={(e) =>
+                              this.onContentInpCh(cc, key, e.target.value)
+                            }
+                          />
+                        )}
+                        {dateFields.includes(key) && (
+                          <Input
+                            type="date"
+                            value={editItemContent[key]}
+                            name={key}
+                            onChange={(e) =>
+                              this.onContentInpCh(cc, key, e.target.value)
+                            }
+                          />
+                        )}
+                        {RichEditorFields.includes(key) && (
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={editItem.desc || ""}
+                            onInit={(editor) => {}}
+                            onChange={(event, editor) => {
+                              const data = editor.getData();
+                              this.onContentInpCh(cc, key, data);
+                            }}
+                          />
+                        )}
+                        {textAreaFields.includes(key) && (
+                          <textarea
+                            type={key}
+                            class="form-control"
+                            value={editItemContent[key]}
+                            name="tag"
+                            onChange={(e) =>
+                              this.onContentInpCh(cc, "tag", e.target.value)
+                            }
+                          />
+                        )}
+                      </Col>
+                    </Row>
+                  ))}
+              </Container>
+            </form>{" "}
+          </ModalBody>
+        </Modal>
       </>
     );
   }

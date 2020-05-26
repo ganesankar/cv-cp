@@ -45,6 +45,7 @@ export default class App extends Component {
     });
   };
   render() {
+    const { user } = this.state;
     return (
       <div className="bg-light rootapp">
         <ToastsContainer store={ToastsStore} />
@@ -58,7 +59,9 @@ export default class App extends Component {
 
               <Header
                 {...this.props}
-                user={this.state.user}
+                user={
+                  user && user.user_metadata ? user.user_metadata.full_name : ""
+                }
                 logout={this.logout}
               />
               <div className="main-content">
