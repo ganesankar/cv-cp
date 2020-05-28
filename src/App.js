@@ -68,7 +68,7 @@ export default class App extends Component {
                 <Switch>
                   <Route
                     exact
-                    path="/pages-list"
+                    path="/list"
                     component={Home}
                     user={this.state.user}
                   />

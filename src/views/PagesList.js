@@ -602,65 +602,41 @@ export default class PagesList extends Component {
                               onSortEndContent={this.onSortEndContent}
                               useDragHandle
                             ></SortableContainer>
-                            <Table>
-                              <thead>
-                                <tr className="text-uppercase">
-                                  {editItem.content &&
-                                    editItem.content.length > 0 &&
-                                    editItem.content[0] &&
-                                    Object.keys(editItem.content[0]).length >
-                                      2 && <th> EDIT</th>}
+                            <div>
+                              <Container fluid>
+                                <Row className="text-uppercase">
+                                  <Col> EDIT</Col>
                                   {editItem.content &&
                                     editItem.content.length > 0 &&
                                     Object.keys(
                                       editItem.content[0]
                                     ).map((key, i) => (
-                                      <>{i < 2 && <th>{key}</th>}</>
+                                      <>{i < 2 && <Col>{key}</Col>}</>
                                     ))}
-                                </tr>
-                              </thead>
-                              <tbody>
+                                </Row>
+                              </Container>
+                              <Container fluid>
                                 {editItem.content &&
                                   editItem.content.map((value, index) => (
-                                    <tr>
-                                      {value && Object.keys(value).length > 2 && (
-                                        <td>
-                                          <button
-                                            className="btn btn-primary btn-sm"
-                                            type="button"
-                                            onClick={(e) =>
-                                              this.openItemContentModal(index)
-                                            }
-                                          >
-                                            EDIT
-                                          </button>
-                                        </td>
-                                      )}
+                                    <Row>
+                                      <Col>
+                                        <button
+                                          className="btn btn-primary btn-sm"
+                                          type="button"
+                                          onClick={(e) =>
+                                            this.openItemContentModal(index)
+                                          }
+                                        >
+                                          EDIT
+                                        </button>
+                                      </Col>
                                       {Object.keys(value).map((key, i) => (
-                                        <>
-                                          {i < 2 && (
-                                            <td>
-                                              <Input
-                                                type="text"
-                                                className="form-control-sm"
-                                                value={value[key]}
-                                                name="type"
-                                                onChange={(e) =>
-                                                  this.onContentInpCh(
-                                                    index,
-                                                    key,
-                                                    e.target.value
-                                                  )
-                                                }
-                                              />
-                                            </td>
-                                          )}
-                                        </>
+                                        <Col>{value[key]}</Col>
                                       ))}
-                                    </tr>
+                                    </Row>
                                   ))}{" "}
-                              </tbody>
-                            </Table>
+                              </Container>
+                            </div>
                           </Container>
                         </TabPane>
                       </TabContent>

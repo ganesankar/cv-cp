@@ -35,6 +35,9 @@ const Header = (props) => {
                     <NavLink href={nav.path}> {nav.name}</NavLink>
                   </NavItem>
                 ))}
+              <NavItem>
+                <NavLink href="/list"> List</NavLink>
+              </NavItem>
             </Nav>
             <Nav>
               <NavItem>
