@@ -140,7 +140,6 @@ export default class PagesList extends Component {
             client: "",
             company: "",
             desc: "",
-            size: "",
           },
         },
         {
@@ -602,24 +601,22 @@ export default class PagesList extends Component {
                               onSortEndContent={this.onSortEndContent}
                               useDragHandle
                             ></SortableContainer>
-                            <div>
-                              <Container fluid>
-                                <Row className="text-uppercase">
-                                  <Col> EDIT</Col>
+                            <Table>
+                              <thead>
+                                <tr className="text-uppercase">
+                                  <th> EDIT</th>
                                   {editItem.content &&
                                     editItem.content.length > 0 &&
                                     Object.keys(
                                       editItem.content[0]
-                                    ).map((key, i) => (
-                                      <>{i < 2 && <Col>{key}</Col>}</>
-                                    ))}
-                                </Row>
-                              </Container>
-                              <Container fluid>
+                                    ).map((key, i) => <th>{key}</th>)}
+                                </tr>
+                              </thead>
+                              <tbody>
                                 {editItem.content &&
                                   editItem.content.map((value, index) => (
-                                    <Row>
-                                      <Col>
+                                    <tr>
+                                      <td>
                                         <button
                                           className="btn btn-primary btn-sm"
                                           type="button"
@@ -629,14 +626,15 @@ export default class PagesList extends Component {
                                         >
                                           EDIT
                                         </button>
-                                      </Col>
+                                      </td>
+
                                       {Object.keys(value).map((key, i) => (
-                                        <Col>{value[key]}</Col>
+                                        <td>{value[key]}</td>
                                       ))}
-                                    </Row>
+                                    </tr>
                                   ))}{" "}
-                              </Container>
-                            </div>
+                              </tbody>
+                            </Table>
                           </Container>
                         </TabPane>
                       </TabContent>
